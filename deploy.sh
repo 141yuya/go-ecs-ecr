@@ -5,7 +5,7 @@ JQ="jq --raw-output --exit-status"
 
 configure_aws_cli(){
 	aws --version
-	aws configure set default.region us-east-1
+	aws configure set default.region ap-northeast-1
 	aws configure set default.output json
 }
 
@@ -42,7 +42,7 @@ make_task_def(){
 	task_template='[
 		{
 			"name": "go-sample-webapp",
-			"image": "%s.dkr.ecr.us-east-1.amazonaws.com/go-sample-webapp:%s",
+			"image": "%s.dkr.ecr.ap-northeast-1.amazonaws.com/go-sample-webapp:%s",
 			"essential": true,
 			"memory": 200,
 			"cpu": 10,
@@ -59,8 +59,8 @@ make_task_def(){
 }
 
 push_ecr_image(){
-	eval $(aws ecr get-login --region us-east-1)
-	docker push $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/go-sample-webapp:$CIRCLE_SHA1
+	eval $(aws ecr get-login --region ap-northeast-1)
+	docker push $AWS_ACCOUNT_ID.dkr.ecr.ap-northeast-1.amazonaws.com/go-sample-webapp:$CIRCLE_SHA1
 }
 
 register_definition() {
