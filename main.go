@@ -1,17 +1,21 @@
 package main
 
-import(
-	"fmt"
-	"net/http"
+import (
+    "fmt"
+    "net"
+    "net/http"
+    "net/http/fcgi"
 )
 
-func mainHandler() http.HandlerFunc{
-	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request){
-		fmt.Fprintf(w, "Hello World!")
-	})
+func handler(res http.ResponseWriter, req *http.Request) {
+    fmt.Fprint(res, "Hello World!")
 }
 
-func main(){
-	http.HandleFunc("/", mainHandler())
-	http.ListenAndServe(":8080", nil)
+func main() {
+    l, err := net.Listen("tcp", "127.0.0.1:9000") // TCP 9000 番ポートで Listen
+    if err != nil {
+        return
+    }
+    http.HandleFunc("/", handler)
+    fcgi.Serve(l, nil)
 }
